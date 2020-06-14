@@ -1,20 +1,62 @@
 const addButton = document.getElementById("addButton");
+const uploadButton = document.getElementById("uploadButton");
+const downloadButton = document.getElementById("downloadButton");
 const clearButton = document.getElementById("clearButton");
 const modalSaveButton = document.getElementById("modalSaveButton");
+const modalDeleteButton = document.getElementById("modalDeleteButton");
 const inputName = document.getElementById("inputName");
 const inputNameModal = document.getElementById("inputNameModal");
 const inputLink = document.getElementById("inputLink");
 const inputLinkModal = document.getElementById("inputLinkModal");
 
 addButton.addEventListener("click", add);
+uploadButton.addEventListener("click", load);
+downloadButton.addEventListener("click", download);
 clearButton.addEventListener("click", clear);
 modalSaveButton.addEventListener("click", update);
+modalDeleteButton.addEventListener("click", deleteFromModal);
 
 let context;
 
+let linkObjList = [];
+
+const exampleList = [
+    {
+        url: 'http://www.google.es',
+        name: 'Google'
+    },
+    {
+        url: 'http://www.twitter.es',
+        name: 'Twitter'
+    },
+    {
+        url: 'http://www.nodesign.dev',
+        name: 'NoDesignDev'
+    },
+    {
+        url: 'http://www.stackoverflow.com',
+        name: 'StackOverflow'
+    }
+]
+
+
+function load() {
+    const list = exampleList;
+    for (let i = 0; i < list.length; i++) {
+        addRow(list[i].url, list[i].name);
+    }
+}
+
 function add() {
-    let url = "http://www." + inputLink.value; 
+    if (inputLink.value == "" || inputName.value == "") {
+        return false;
+    }
+    let url = "http://www." + inputLink.value;
+
     addRow(url, inputName.value);
+
+
+    clear();
 }
 
 function clear() {
@@ -53,27 +95,59 @@ function addRow(url, name) {
     </div>
     `;
     document.getElementById("linkContainer").appendChild(div);
-    clear();
+
+    let obj = {
+        name: name,
+        url: url
+    }
+
+    linkObjList.push(obj);
 }
 
-function removeRow(input){
+function removeRow(input) {
     let borrar = confirm("¿Estás seguro que quieres borrar el link?");
-    if (borrar){
+    if (borrar) {
+        let url = input.parentNode.parentNode.childNodes[3].getAttribute("href");
+        for (let i = 0; i < linkObjList.length; i++) {
+
+            if (linkObjList[i].url == url) {
+                linkObjList.splice(i, 1);
+            }
+        }
+
         input.parentNode.parentNode.remove();
     }
 }
 
-function addModalData(input){
+function addModalData(input) {
     context = input;
     let childrens = input.parentNode.parentNode.childNodes;
     inputLinkModal.value = childrens[3].getAttribute("href").substring(11);
     inputNameModal.value = childrens[3].innerHTML;
 }
 
-function update(){
-    console.log("Descripcion modal: " + inputNameModal.value);
-    console.log("Link modal: " + inputLinkModal.value);
+function update() {
     context.parentNode.parentNode.childNodes[3].innerHTML = inputNameModal.value;
     context.parentNode.parentNode.childNodes[3].setAttribute("href", "http://www." + inputLinkModal.value);
     context.parentNode.parentNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("src", "http://s2.googleusercontent.com/s2/favicons?domain_url=http://www." + inputLinkModal.value);
 }
+
+function deleteFromModal() {
+    removeRow(context);
+}
+
+function download() {
+    const text = JSON.stringify(linkObjList);
+    const filename = 'listalinks.json';
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
