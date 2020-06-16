@@ -13,10 +13,10 @@ html{
 body{
     font-family: 'Roboto', sans-serif;
     height: 100%;
-    overflow: hidden;
 }
+
 
 #linkContainer{
     overflow-y: auto;
-    height: 600px;
+    height:100%;
 }

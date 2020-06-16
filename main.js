@@ -8,6 +8,8 @@ const inputName = document.getElementById("inputName");
 const inputNameModal = document.getElementById("inputNameModal");
 const inputLink = document.getElementById("inputLink");
 const inputLinkModal = document.getElementById("inputLinkModal");
+const fileDownloadName = document.getElementById("fileDownloadName");
+const fileDownloadExtension = document.getElementById("fileDownloadExtension");
 
 addButton.addEventListener("click", add);
 uploadButton.addEventListener("click", load);
@@ -71,7 +73,7 @@ function addRow(url, name) {
     div.innerHTML = `
     <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">
-            <img src="http://s2.googleusercontent.com/s2/favicons?domain_url=${url}"alt="Link">
+            <img src="http://s2.googleusercontent.com/s2/favicons?sz=16&domain_url=${url}"alt="Link">
         </span>
     </div>
     <a href="${url}" target="_blank" class="form-control">${name}</a>
@@ -138,7 +140,8 @@ function deleteFromModal() {
 
 function download() {
     const text = JSON.stringify(linkObjList);
-    const filename = 'listalinks.json';
+    const extension = fileDownloadExtension.options[fileDownloadExtension.value].innerText;
+    const filename = fileDownloadName.value + extension;
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
@@ -150,4 +153,5 @@ function download() {
 
     document.body.removeChild(element);
 }
+
 
