@@ -20,3 +20,16 @@ body{
     overflow-y: auto;
     height:100%;
 }
+
+.remove-border{
+    border-width: 0;
+}
+
+.hide{
+    display: none;
+}
+
+.show-hover:hover + .hide{
+    display: inline;
+    transition: ease-in;
+}

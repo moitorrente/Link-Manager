@@ -1,6 +1,8 @@
 const addButton = document.getElementById("addButton");
 const uploadButton = document.getElementById("uploadButton");
 const downloadButton = document.getElementById("downloadButton");
+const deleteAllButton = document.getElementById("deleteAllButton");
+const openAllButton = document.getElementById("openAllButton");
 const clearButton = document.getElementById("clearButton");
 const modalSaveButton = document.getElementById("modalSaveButton");
 const modalDeleteButton = document.getElementById("modalDeleteButton");
@@ -10,6 +12,8 @@ const inputLink = document.getElementById("inputLink");
 const inputLinkModal = document.getElementById("inputLinkModal");
 const fileDownloadName = document.getElementById("fileDownloadName");
 const fileDownloadExtension = document.getElementById("fileDownloadExtension");
+const fileSelector = document.getElementById('inputGroupFile04');
+const titulo = document.getElementById('titulo');
 
 addButton.addEventListener("click", add);
 uploadButton.addEventListener("click", load);
@@ -17,35 +21,48 @@ downloadButton.addEventListener("click", download);
 clearButton.addEventListener("click", clear);
 modalSaveButton.addEventListener("click", update);
 modalDeleteButton.addEventListener("click", deleteFromModal);
+deleteAllButton.addEventListener("click", deleteAll);
+openAllButton.addEventListener("click", openAll);
+fileSelector.addEventListener('change', (event) => {
+    const fileList = event.target.files;
+    getAsText(fileList[0]);
+});
 
-let context;
+let file;
+let list;
 
 let linkObjList = [];
 
-const exampleList = [
-    {
-        url: 'http://www.google.es',
-        name: 'Google'
-    },
-    {
-        url: 'http://www.twitter.es',
-        name: 'Twitter'
-    },
-    {
-        url: 'http://www.nodesign.dev',
-        name: 'NoDesignDev'
-    },
-    {
-        url: 'http://www.stackoverflow.com',
-        name: 'StackOverflow'
-    }
-]
+const exampleList = {
+    name: 'Nombre de ejemplo',
+    elements: 4,
+    data: [
+        {
+            url: 'http://www.google.es',
+            name: 'Google'
+        },
+        {
+            url: 'http://www.twitter.es',
+            name: 'Twitter'
+        },
+        {
+            url: 'http://www.nodesign.dev',
+            name: 'NoDesignDev'
+        },
+        {
+            url: 'http://www.stackoverflow.com',
+            name: 'StackOverflow'
+        }
+    ]
+}
+
+
 
 
 function load() {
-    const list = exampleList;
-    for (let i = 0; i < list.length; i++) {
-        addRow(list[i].url, list[i].name);
+    titulo.value = file.name;
+    for (let i = 0; i < file.data.length; i++) {
+        addRow(file.data[i].url, file.data[i].name);
     }
 }
 
@@ -54,10 +71,7 @@ function add() {
         return false;
     }
     let url = "http://www." + inputLink.value;
-
     addRow(url, inputName.value);
-
-
     clear();
 }
 
@@ -69,7 +83,7 @@ function clear() {
 function addRow(url, name) {
     let div = document.createElement('div');
 
-    div.className = 'input-group mb-2';
+    div.className = 'input-group mb-2 link-row';
     div.innerHTML = `
     <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1">
@@ -114,6 +128,7 @@ function removeRow(input) {
 
             if (linkObjList[i].url == url) {
                 linkObjList.splice(i, 1);
+                break;
             }
         }
 
@@ -128,7 +143,15 @@ function addModalData(input) {
     inputNameModal.value = childrens[3].innerHTML;
 }
 
+
 function update() {
+    for (let i = 0; i < linkObjList.length; i++) {
+        if (linkObjList[i].name == context.parentNode.parentNode.childNodes[3].innerHTML) {
+            linkObjList[i].url = "http://www." + inputLinkModal.value;
+            linkObjList[i].name = inputNameModal.value;
+            break;
+        }
+    }
     context.parentNode.parentNode.childNodes[3].innerHTML = inputNameModal.value;
     context.parentNode.parentNode.childNodes[3].setAttribute("href", "http://www." + inputLinkModal.value);
     context.parentNode.parentNode.childNodes[1].childNodes[1].childNodes[1].setAttribute("src", "http://s2.googleusercontent.com/s2/favicons?domain_url=http://www." + inputLinkModal.value);
@@ -139,7 +162,13 @@ function deleteFromModal() {
 }
 
 function download() {
-    const text = JSON.stringify(linkObjList);
+    const obj = {
+        name: titulo.value,
+        elements: linkObjList.length,
+        data: linkObjList
+    }
+
+    const text = JSON.stringify(obj);
     const extension = fileDownloadExtension.options[fileDownloadExtension.value].innerText;
     const filename = fileDownloadName.value + extension;
     var element = document.createElement('a');
@@ -154,4 +183,43 @@ function download() {
     document.body.removeChild(element);
 }
 
+function deleteAll() {
+    let borrar = confirm("¿Estás seguro que quieres borrar todos los links?");
+    if (borrar) {
+        let element = document.getElementsByClassName("link-row");
+        for (let i = element.length - 1; i >= 0; i--) {
+            element[i].parentNode.removeChild(element[i]);
+        }
+        linkObjList.length = 0;
+    }
+}
 
+function openAll() {
+    for (let i = 0; i < linkObjList.length; i++) {
+        window.open(linkObjList[i].url, '_blank');
+    }
+}
+
+$(".custom-file-input").on("change", function () {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+
+
+function getAsText(fileToRead) {
+    let reader = new FileReader();
+    reader.readAsText(fileToRead);
+    reader.onload = loadHandler;
+    reader.onerror = errorHandler;
+}
+
+function loadHandler(event) {
+    file = JSON.parse(event.target.result);
+    load(file);
+}
+
+function errorHandler(evt) {
+    if (evt.target.error.name == "NotReadableError") {
+        alert("No se puede leer el fichero");
+    }
+}

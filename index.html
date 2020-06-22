@@ -115,12 +115,12 @@
                             <div class="input-group mb-3">
                                 <input type="text" class="form-control" placeholder="Nombre fichero"
                                     id="fileDownloadName" required>
-                                <select class="custom-select" id="fileDownloadExtension" style="max-width: 20%;">
+                                <select class="custom-select" id="fileDownloadExtension" style="max-width: 5em;">
                                     <option value="0" selected>.json</option>
                                     <option value="1">.txt</option>
                                 </select>
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn btn-outline-primary" id="downloadButton">
+                                    <button type="button" class="btn btn-outline-primary" id="downloadButton">
                                         <svg class="bi bi-download" width="1em" height="1em" viewBox="0 0 16 16"
                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd"
@@ -137,35 +137,71 @@
                     </div>
                 </div>
 
+                <div class="row border rounded mx-auto pt-3 mt-3 pb-3">
+                    <div class="col-md-12 d-inline-flex justify-content-between">
+                        <h6 class="card-subtitle text-muted align-self-center">Abrir todos los links</h6>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary" id="openAllButton" style="width:5em">
+                                <svg class="bi bi-skip-forward-fill" width="1em" height="1em" viewBox="0 0 16 16"
+                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M15.5 3.5a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4a.5.5 0 0 1 .5-.5z" />
+                                    <path
+                                        d="M7.596 8.697l-6.363 3.692C.693 12.702 0 12.322 0 11.692V4.308c0-.63.693-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                                    <path
+                                        d="M15.096 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.693-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div class="row border rounded mx-auto pt-3 mt-3 pb-3">
-                    <div class="col-md-12">
-                        <h6 class="card-subtitle mb-2 text-muted">Borrar todos los datos</h6>
+                    <div class="col-md-12 d-inline-flex justify-content-between">
+                        <h6 class="card-subtitle text-muted align-self-center">Borrar todos los datos</h6>
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-danger" id="downloadButton">
-                                <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <button type="submit" class="btn btn-danger" id="deleteAllButton" style="width:5em">
+                                <svg class="bi bi-trash" width="1em" height="1em" viewBox="0 0 16 16"
+                                    fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                     <path fill-rule="evenodd"
                                         d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                                 </svg>
                                 </svg>
                             </button>
                         </div>
-
                     </div>
                 </div>
 
 
 
             </div>
-            <div class="col-md-6 mx-auto" id="linkContainer">
+            <div class="col-md-6 mx-auto border rounded p-3">
+                <div class="input-group mb-3 title-wrapper">
 
+                    <input type="text" class="form-control remove-border show-hover" aria-label="titulo"
+                        aria-describedby="basic-addon1" value="Titulo" id="titulo">
+                        <button class="btn btn-outline-primary remove-border hide" type="button">
+                            <svg class="bi bi-pencil" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M11.293 1.293a1 1 0 0 1 1.414 0l2 2a1 1 0 0 1 0 1.414l-9 9a1 1 0 0 1-.39.242l-3 1a1 1 0 0 1-1.266-1.265l1-3a1 1 0 0 1 .242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" />
+                                <path fill-rule="evenodd"
+                                    d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 0 0 .5.5H4v.5a.5.5 0 0 0 .5.5H5v.5a.5.5 0 0 0 .5.5H6v-1.5a.5.5 0 0 0-.5-.5H5v-.5a.5.5 0 0 0-.5-.5H3z" />
+                            </svg>
+                        </button>
+                    </input>
+                </div>
+
+
+
+
+
+
+
+                <div class="col-md-12 mx-auto p-3 show" id="linkContainer"></div>
             </div>
         </div>
-
-
-
 
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
